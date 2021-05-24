@@ -74,7 +74,7 @@ export default {
                 Reduction_rate : Number(deal.reducedPrice / deal.normPrice).toFixed(2),
                 Deal_period : 'start: '+startDateString+' --- end: '+endDateString,
                 Delete : deal._id,
-                Update : deal._id
+                Update : deal
               });
           });
     } catch (error) {
@@ -93,6 +93,10 @@ export default {
             } catch (error) {
                 console.log(error);
             } 
+        },
+
+        updateRow(dealObj) {
+            this.$emit('updateRequestOrigin', dealObj);
         },
 
   },

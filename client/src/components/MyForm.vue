@@ -1,4 +1,5 @@
 <template>
+
     <div class="container mt-4" style="max-width : 500px;">
         <b-row v-if="saved" class="text-center text-white bg-success mb-2">
             <h5 class="py-1 my-0">saved</h5>
@@ -79,6 +80,7 @@
 //eslint-disable-next-line
     import DealsService from '../dealsService'
 export default {
+    props : ["updateRequest"],
     components: { 
         DateRangePicker,
         MyUpload,
@@ -87,6 +89,7 @@ export default {
     },
     data() {
         return {
+            updateMode : false,
             saved : false,
             newImage : "",
             dealObj : {
@@ -129,22 +132,62 @@ export default {
         }
     },
 
+    watch: {
+        updateRequest: {
+        immediate: true,
+        handler: function (val) {
+            console.log('updateRequest : ', this.updateRequest);
+            // Return the object that changed
+            if (val) {
+
+                this.dealObj = {
+                    _id : val._id,
+                    prodName : val.prodName,
+                    warehouse : val.warehouse,
+                    normPrice : val.normPrice,
+                    reducedPrice : val.reducedPrice,
+                    dealPeriod : {
+                        startDate : val.dealPeriod.startDate,
+                        endDate : val.dealPeriod.endDate
+                    },
+                    imageId : val.imageId
+                };
+
+                this.updateMode = true;
+            }
+        },
+        deep: true
+        }
+    },
 
     methods: {
 
         async sendData() {
             /* const auth = '/api/deals/login/'+this.username+'/'+this.pass; */
             let vm = this;
-            try {
-                await DealsService.createDeals(this.dealObj)
-                .then(function (response) {
-                        console.log('createResponse ', response);
-                        vm.saved = true;
-                        vm.resetPage();
-                });
-            } catch (error) {
-                console.log(error);
-            } 
+            if (this.updateMode) {
+                console.log('update triggered');
+                try {
+                    await DealsService.updateDeals(vm.dealObj._id, vm.dealObj)
+                    .then(function (response) {
+                            console.log('updateResponse: ', response);
+                            vm.$emit('updateFinished', true);
+                    });
+                } catch (error) {
+                    console.log(error);
+                } 
+            } else {
+                try {
+                    await DealsService.createDeals(vm.dealObj)
+                    .then(function (response) {
+                            console.log('createResponse: ', response);
+                            vm.saved = true;
+                            vm.resetPage();
+                    });
+                } catch (error) {
+                    console.log(error);
+                } 
+            }
         },
 
         resetPage() {

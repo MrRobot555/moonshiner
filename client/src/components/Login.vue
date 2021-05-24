@@ -16,13 +16,25 @@
 /* import DealsService from '../dealsService' */
 import axios from 'axios';
 export default {
-    props : ['adminUser'],
+    props : ['adminUser', "updateRequestIn"],
     data() {
         return {
             username : "",
             pass : "",
             loggedin : false,
             newDealHit : false
+        }
+    },
+
+    watch: {
+        updateRequestIn: {
+        handler: function (val) {
+            // Return the object that changed
+            if (val._id) {
+                this.newDealHit = true;
+              }
+        },
+        deep: true
         }
     },
 
