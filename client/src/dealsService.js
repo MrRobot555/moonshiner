@@ -49,7 +49,8 @@ class DealsService {
 //deleteDeals
 //eslint-disable-next-line
     static deleteDeals(id) {
-        return axios.delete(`$(url)$(id)`);
+        const delPath = '/api/deals/'+id;
+        return axios.delete(delPath);
     }
 
 }

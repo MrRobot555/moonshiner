@@ -49,7 +49,15 @@ export default {
     }
   },
 
-  async created() {
+  created() {
+      this.readIn();
+  },
+
+
+  methods: {
+
+  async readIn() {
+    this.items = [];
     let vm = this;
     try {
       this.deals = await DealsService.getDeals();
@@ -74,10 +82,19 @@ export default {
     }
   },
 
-  methods: {
-    deleteRow(id) {
-        console.log('delete id: ', id);
-    }
+        async deleteRow(id) {
+            let vm = this;
+            try {
+                await DealsService.deleteDeals(id)
+                .then(function (response) {
+                        console.log('deleteResponse: ', response);
+                        vm.readIn();
+                });
+            } catch (error) {
+                console.log(error);
+            } 
+        },
+
   },
 
   computed: {
