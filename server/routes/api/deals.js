@@ -14,7 +14,12 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     const deals = await loadPostsCollection();
     await deals.insertOne({
-        text : req.body.text,
+        prodName : req.body.prodName,
+        warehouse : req.body.warehouse,
+        normPrice :req.body.normPrice,
+        reducedPrice :req.body.reducedPrice,
+        dealPeriod :req.body.dealPeriod,
+        imageId :req.body.imageId,
         createdAt : new Date()
     });
     res.status(201).send();
@@ -45,6 +50,16 @@ router.put('/:id/:textinput', async (req, res) => {
     res.status(200).send();
 });
 
+
+//Login
+router.post('/login/:email/:pass', (req, res) => {
+    if (req.params.email == 'admin@admin.com' && req.params.pass == 'password') 
+    {
+        res.send(true);
+    } else {
+        res.send(false);
+    }
+});
 
 
 async function loadPostsCollection() {
