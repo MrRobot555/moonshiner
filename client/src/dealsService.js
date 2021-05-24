@@ -41,8 +41,9 @@ class DealsService {
 
 //updateDeals
 //eslint-disable-next-line
-    static updateDeals(id, text) {
-        return axios.put(`$(url)$(id)/$(text)`);
+    static updateDeals(id, dealObj) {
+        const updPath = '/api/deals/'+id;
+        return axios.put(updPath, dealObj);
     }
 
 

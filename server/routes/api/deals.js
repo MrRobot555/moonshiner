@@ -35,14 +35,19 @@ router.delete('/:id', async (req, res) => {
 
 
 //Update Post
-router.put('/:id/:textinput', async (req, res) => {
+router.put('/:id', async (req, res) => {
     const deals = await loadPostsCollection();
     await deals.updateOne(
         {_id: new mongodb.ObjectID(req.params.id)}, 
         {
             $set : 
             {
-                text : req.params.textinput,
+                prodName : req.body.prodName,
+                warehouse : req.body.warehouse,
+                normPrice :req.body.normPrice,
+                reducedPrice :req.body.reducedPrice,
+                dealPeriod :req.body.dealPeriod,
+                imageId :req.body.imageId,
                 updatedAt : new Date()
             }
         }
